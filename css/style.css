@@ -496,6 +496,51 @@ body {
 .character-tile .char-name { font-size: 11px; margin-top: 4px; color: #ddd; font-family: var(--cute-font); font-weight: bold; }
 .character-tile.selected .char-name { color: var(--gold); }
 
+/* === Online lobby === */
+.conn-status {
+  text-align: center; font-size: 12px; color: #9fc; font-family: var(--cute-font);
+  background: rgba(0,0,0,0.3); border-radius: 8px; padding: 5px 12px; margin-bottom: 10px;
+}
+.entry-actions { display: flex; flex-direction: column; gap: 12px; align-items: center; margin-top: 6px; }
+.entry-actions > button {
+  background: var(--gold); color: #000; border: none; padding: 11px 30px;
+  border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: bold; font-family: var(--cute-font);
+}
+.entry-actions > button:hover:not(:disabled) { background: var(--highlight); }
+.entry-actions button:disabled { opacity: 0.4; cursor: not-allowed; }
+.join-row { display: flex; gap: 8px; align-items: center; }
+.join-row input {
+  background: #333; color: #fff; border: 1px solid #555; width: 130px;
+  padding: 9px 12px; border-radius: 6px; font-size: 17px; letter-spacing: 4px;
+  text-align: center; font-family: var(--pop-font);
+}
+.join-row button {
+  background: rgba(255,255,255,0.16); color: #fff; border: 1px solid rgba(255,255,255,0.4);
+  padding: 10px 18px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold; font-family: var(--cute-font);
+}
+.join-row button:hover:not(:disabled) { background: rgba(255,255,255,0.28); }
+.room-code-display {
+  text-align: center; font-family: var(--pop-font); font-size: 44px; color: var(--gold);
+  letter-spacing: 12px; margin: 8px 0 14px;
+  text-shadow: 0 0 18px rgba(255,213,79,0.5);
+  user-select: text; /* let people copy the code */
+}
+.lobby-list { display: flex; flex-direction: column; gap: 6px; max-width: 420px; margin: 0 auto; }
+.lobby-member {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px; padding: 6px 12px; font-family: var(--cute-font); font-size: 14px;
+}
+.lobby-member img { width: 34px; height: 42px; object-fit: cover; object-position: center top; border-radius: 5px; }
+.lobby-member .lm-cpu { width: 34px; text-align: center; font-size: 22px; }
+.lobby-member .lm-name { flex: 1; font-weight: bold; }
+.lobby-member .lm-host {
+  font-size: 11px; background: var(--gold); color: #000; border-radius: 9px;
+  padding: 1px 9px; font-weight: bold;
+}
+.lobby-member.empty { opacity: 0.45; border-style: dashed; }
+.lobby-member.off { opacity: 0.4; text-decoration: line-through; }
+
 /* Toast */
 .toast-area { position: fixed; top: 26%; left: 50%; transform: translateX(-50%); z-index: 200; pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .toast {

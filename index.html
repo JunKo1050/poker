@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ポーカートーナメント</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Mochiy+Pop+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body { overflow: auto; }
+  .landing {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 28px; padding: 24px;
+    position: relative;
+  }
+  .landing-felt {
+    position: fixed; left: 50%; top: 55%; transform: translate(-50%, -50%);
+    width: min(86vw, 1040px); height: min(70vh, 560px);
+    border-radius: 50% / 48%; border: 13px solid transparent;
+    background:
+      radial-gradient(ellipse at 50% 36%, #11744a 0%, #0c5a39 55%, #094730 100%) padding-box,
+      linear-gradient(160deg, #7a4a22 0%, #4a2c12 45%, #6b3e1c 100%) border-box;
+    box-shadow: inset 0 0 70px rgba(0,0,0,0.45), 0 14px 44px rgba(0,0,0,0.55);
+    z-index: -1;
+  }
+  .landing h1 {
+    font-family: var(--pop-font); font-size: clamp(28px, 6vw, 52px); color: var(--gold);
+    letter-spacing: 6px; text-shadow: 0 0 24px rgba(255,213,79,0.5), 3px 3px 0 #000;
+    text-align: center;
+  }
+  .landing .sub { font-family: var(--cute-font); color: #cfe; font-size: 14px; letter-spacing: 2px; }
+  .mode-btns { display: flex; gap: 22px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+  .mode-btn {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    width: 250px; padding: 26px 20px; cursor: pointer; text-decoration: none;
+    background: linear-gradient(135deg, rgba(20,20,35,0.92), rgba(40,28,8,0.92));
+    border: 2px solid rgba(212,175,55,0.55); border-radius: 18px;
+    color: #fff; font-family: var(--cute-font);
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  }
+  .mode-btn:hover { transform: translateY(-6px); border-color: var(--highlight); box-shadow: 0 0 28px rgba(212,175,55,0.45), 0 12px 28px rgba(0,0,0,0.5); }
+  .mode-btn .mb-icon { font-size: 44px; }
+  .mode-btn .mb-title { font-family: var(--pop-font); font-size: 20px; color: var(--gold); letter-spacing: 2px; }
+  .mode-btn .mb-desc { font-size: 12px; color: #ccc; text-align: center; line-height: 1.6; }
+  .landing .foot { font-family: var(--cute-font); font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 12px; }
+</style>
+</head>
+<body>
+<div class="landing">
+  <div class="landing-felt"></div>
+  <h1>🃏 ポーカートーナメント</h1>
+  <div class="sub">― TEXAS HOLD'EM ―</div>
+  <div class="mode-btns">
+    <a class="mode-btn" href="poker.html">
+      <div class="mb-icon">🤖</div>
+      <div class="mb-title">CPU対戦</div>
+      <div class="mb-desc">ひとりで遊ぶ。<br>個性豊かなCPU5人とトーナメント</div>
+    </a>
+    <a class="mode-btn" href="online.html">
+      <div class="mb-icon">🌐</div>
+      <div class="mb-title">オンライン対戦</div>
+      <div class="mb-desc">友達と遊ぶ。<br>部屋を作ってコードを共有、空席はCPU</div>
+    </a>
+  </div>
+  <div class="foot">最大6人 ・ 20ハンドごとにブラインド2倍 ・ 最後の1人が優勝</div>
+</div>
+</body>
+</html>

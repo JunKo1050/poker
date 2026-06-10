@@ -1,0 +1,18 @@
+{
+  "name": "poker-server",
+  "version": "1.0.0",
+  "description": "Texas Hold'em tournament game server (rooms + authoritative engine)",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "socket.io-client": "^4.7.5"
+  }
+}
