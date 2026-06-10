@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ポーカートーナメント - CPU対戦</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Mochiy+Pop+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<audio id="bgm-audio" loop preload="auto">
+  <source src="ClockworkCards.mp3" type="audio/mpeg">
+</audio>
+
+<div id="app">
+  <div class="topbar">
+    <h1>🃏 ポーカートーナメント</h1>
+    <div class="info" id="topbar-info">
+      <span>ハンド <b id="hand-display">0</b></span>
+      <span class="state-badge blind" id="blind-badge">SB 50 / BB 100</span>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button id="btn-speed" title="ゲーム速度">⏩ ×1</button>
+      <button id="btn-sound" title="音のオン/オフ">🔊</button>
+      <button onclick="showRulesModal()">ルール</button>
+      <button onclick="newGame()">新しいゲーム</button>
+    </div>
+  </div>
+  <div class="table" id="table">
+    <div class="table-felt"><div class="felt-logo">♠ TEXAS HOLD'EM ♠</div></div>
+    <div class="pot-info" id="pot-info" style="display:none"></div>
+    <div class="field-area empty-field" id="field-area"></div>
+    <div class="street-info" id="street-info" style="display:none"></div>
+    <div class="scoreboard" id="scoreboard"></div>
+    <div class="log-panel" id="log-panel"></div>
+    <div class="hand-area" id="hand-area">
+      <div class="hole-wrap">
+        <div class="hand" id="hand"></div>
+        <div class="made-hand-label" id="made-hand-label" style="display:none"></div>
+      </div>
+      <div class="action-area" id="action-area" style="display:none"></div>
+      <button id="btn-reserve" class="reserve-btn" style="display:none">予約：チェック/フォールド</button>
+    </div>
+  </div>
+  <div class="toast-area" id="toast-area"></div>
+</div>
+
+<!-- Setup Modal -->
+<div class="modal-overlay" id="modal-setup">
+  <div class="modal" style="min-width:440px">
+    <h2>ポーカートーナメント 設定</h2>
+    <div class="desc">6人対戦（あなた + CPU5人）・初期スタック 30,000点<br>SB50 / BB100 から開始、20ハンドごとにブラインド2倍。チップが0になると脱落、最後の1人が優勝。</div>
+    <div class="settings-grid">
+      <div class="settings-row">
+        <label>あなたの名前</label>
+        <input id="set-name" type="text" value="あなた" maxlength="8">
+      </div>
+    </div>
+    <div class="character-picker-label">▼ キャラクターを選んでください ▼</div>
+    <div class="character-grid" id="character-grid"></div>
+    <div class="actions">
+      <button onclick="startGame()">トーナメント開始</button>
+    </div>
+  </div>
+</div>
+
+<!-- Eliminated (spectate/leave) Modal -->
+<div class="modal-overlay" id="modal-eliminated">
+  <div class="modal" style="min-width:360px">
+    <h2>💀 脱落</h2>
+    <div class="desc" id="eliminated-desc">チップが尽きました。トーナメントから脱落です。</div>
+    <div class="actions">
+      <button onclick="chooseSpectate()">観戦する</button>
+      <button class="secondary" onclick="chooseLeave()">退出する</button>
+    </div>
+  </div>
+</div>
+
+<!-- Final Result Overlay -->
+<div class="final-overlay" id="final-overlay">
+  <div class="final-title" id="final-title">トーナメント終了</div>
+  <div class="final-list" id="final-list"></div>
+  <div class="final-btns">
+    <button onclick="newGame()">もう一度プレイ</button>
+  </div>
+</div>
+
+<!-- Rules Modal -->
+<div class="modal-overlay" id="modal-rules">
+  <div class="modal" style="min-width:500px;max-width:640px">
+    <h2>テキサスホールデム ルール</h2>
+    <div style="font-size:13px;color:#ddd;line-height:1.8">
+      <p style="color:var(--gold);font-weight:bold">進行</p>
+      <p>各プレイヤーに手札（ホールカード）を2枚配り、場に共有カード（コミュニティ）を最大5枚開きます。</p>
+      <p>プリフロップ → フロップ(3枚) → ターン(1枚) → リバー(1枚) の順に、各段階でベットを行います。</p>
+      <p style="margin-top:8px;color:var(--highlight);font-weight:bold">アクション</p>
+      <p>🚪 <b>フォールド</b>：降りる　／　✅ <b>チェック</b>：賭けずに次へ（誰も賭けていない時）</p>
+      <p>📞 <b>コール</b>：相手の賭けに合わせる　／　⬆️ <b>レイズ</b>：賭け額を上げる</p>
+      <p style="margin-top:8px;color:var(--highlight);font-weight:bold">役の強さ（弱い→強い）</p>
+      <p>ハイカード → ワンペア → ツーペア → スリーカード → ストレート → フラッシュ → フルハウス → フォーカード → ストレートフラッシュ（→ ロイヤル）</p>
+      <p style="margin-top:8px;color:var(--highlight);font-weight:bold">チップ・ブラインド</p>
+      <p>初期スタック 30,000点（1BB=100点）。SB50 / BB100 から始まり、20ハンドごとにブラインドが2倍になります。</p>
+      <p>チップが足りない場合は<b>オールイン</b>（持ち分だけ参加、超過分はサイドポット）。チップが0になると脱落します。</p>
+      <p style="margin-top:8px;color:var(--highlight);font-weight:bold">操作</p>
+      <p>キーボード: <b>F</b>=フォールド ／ <b>C</b>=チェック・コール ／ <b>R</b>=レイズ ／ <b>← →</b>=レイズ額の微調整（<b>↑ ↓</b>で大きく変更）。</p>
+      <p>他のプレイヤーの番のとき、右下の「<b>予約：チェック/フォールド</b>」を押しておくと、自分の番が来た瞬間に自動でチェック（無料のとき）またはフォールドします。</p>
+      <p>右上の <b>⏩</b> ボタンでゲーム速度（×1 / ×1.5 / ×2）を切り替えられます。</p>
+    </div>
+    <div class="actions">
+      <button onclick="document.getElementById('modal-rules').classList.remove('show')">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<!-- shared (browser + future game server): constants / cards / cpu / engine -->
+<script src="js/constants.js"></script>
+<script src="js/cards.js"></script>
+<script src="js/cpu.js"></script>
+<script src="js/engine.js"></script>
+<!-- client only: sound / view (rendering & input) / wiring -->
+<script src="js/sound.js"></script>
+<script src="js/view.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
