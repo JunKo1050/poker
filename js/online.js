@@ -8,7 +8,7 @@
 // --- server address -------------------------------------------------
 // Production URL is filled in after the Render deploy.
 // Override anytime with ?server=https://...
-const ONLINE_DEFAULT_SERVER = 'https://poker-server.onrender.com'; // ← Renderデプロイ後に実URLへ更新
+const ONLINE_DEFAULT_SERVER = 'https://poker-qfk0.onrender.com';
 const SERVER_URL = (() => {
   const p = new URLSearchParams(location.search).get('server');
   if (p) return p;
